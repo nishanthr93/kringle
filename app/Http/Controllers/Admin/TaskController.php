@@ -16,11 +16,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::get();
+        $tasks = Task::paginate(5);
         return view('tasks.list', [
             'tasks' => $tasks
         ]);
-        
+
         $user = User::where('is_admin', '!=', '1')->get();
         return view('tasks.index', [
             'users' => $user
@@ -60,8 +60,8 @@ class TaskController extends Controller
         ]);
 
         return redirect()
-        ->route('admin.task.index')
-        ->with('success', 'Task Created SuccessFully!!');
+            ->route('admin.task.index')
+            ->with('success', 'Task Created SuccessFully!!');
     }
 
     /**
@@ -72,7 +72,6 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
     }
 
     /**
@@ -83,7 +82,12 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        $user = User::where('is_admin', '!=', '1')->get();
+
+        return view('tasks.edit', [
+            'users' =>  $user,
+            'task' => $task
+        ]);
     }
 
     /**
@@ -95,7 +99,16 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $this->validate($request, [
+            'user_id' => 'required|not_in:0',
+            'task_description' => 'required',
+        ]);
+
+        $task->update($request->all());
+
+        return redirect()
+            ->route('admin.task.index')
+            ->with('success', 'Task Updated SuccessFully!!');
     }
 
     /**
@@ -106,6 +119,10 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+
+        return redirect()
+            ->route('admin.task.index')
+            ->with('success', 'Task deleted successfully');
     }
 }

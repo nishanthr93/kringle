@@ -11,7 +11,10 @@
                 @endif
                 <div class="card">
                     @if ($tasks->count())
-                        <div class="card-header">{{ __('Task List') }}</div>
+                        <div class="card-header">{{ __('Task List') }}
+                            <a class="btn btn-primary" href="{{route('admin.task.create')}}" role="button">Add</a>
+                        </div>
+                        
                         <table class="table">
                             <thead>
                                 <tr>
@@ -28,14 +31,20 @@
                                         <td>{{ $task->user->name }}</td>
                                         <td>{{ $task->task_description }}</td>
                                         <td>
-                                            <a class="btn btn-primary" href="#" role="button">Edit</a>
-                                            <a class="btn btn-danger" href="#" role="button">Delete</a>
+                                            <a class="btn btn-primary" href="{{route('admin.task.edit',$task)}}" role="button">Edit</a>
+                                            <form action="{{route('admin.task.destroy',$task)}}" method="POST">   
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-center">
+                            {!! $tasks->links() !!}
+                        </div>
                     @else
                         <div class="card-body">
                             <div class="form-group row">
