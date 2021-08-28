@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group([
-        'middleware' => 'is_admin',
+        'middleware' => ['is_manager','is_admin'],
         'prefix'    => 'admin',
         'as' => 'admin.'
     ], function () {

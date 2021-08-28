@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Roles;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -40,7 +41,7 @@ class LoginController extends Controller
 
     protected function authenticated()
     {
-        if (auth()->user()->is_admin) {
+        if ((auth()->user()->role_id == Roles::IS_ADMIN) || (auth()->user()->role_id == Roles::IS_MANAGER)) {
             return redirect()->route('admin.task.index');
         }
 

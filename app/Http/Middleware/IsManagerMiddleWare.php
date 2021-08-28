@@ -6,7 +6,7 @@ use Closure;
 use App\Models\Roles;
 use Illuminate\Http\Request;
 
-class IsAdminMiddleWare
+class IsManagerMiddleWare
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,7 @@ class IsAdminMiddleWare
      */
     public function handle(Request $request, Closure $next)
     {
-        
-        if ((!auth()->check()) && !(auth()->user()->role_id == Roles::IS_ADMIN)) {
+        if ((!auth()->check()) && !(auth()->user()->role_id == Roles::IS_MANAGER)) {
             abort(403);
         }
         return $next($request);

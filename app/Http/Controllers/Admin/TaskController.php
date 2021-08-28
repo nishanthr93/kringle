@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,14 +17,11 @@ class TaskController extends Controller
      */
     public function index()
     {
+        $this->authorize('adminsOnly', Task::class);
+
         $tasks = Task::paginate(5);
         return view('tasks.list', [
             'tasks' => $tasks
-        ]);
-
-        $user = User::where('is_admin', '!=', '1')->get();
-        return view('tasks.index', [
-            'users' => $user
         ]);
     }
 
@@ -34,7 +32,12 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $user = User::where('is_admin', '!=', '1')->get();
+        $this->authorize('create', Task::class);
+
+        $user = User::where('role_id', '!=', Roles::IS_ADMIN)
+            ->where('role_id', '!=', Roles::IS_MANAGER)
+            ->get();
+
         return view('tasks.index', [
             'users' => $user
         ]);
@@ -48,6 +51,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Task::class);
 
         $this->validate($request, [
             'user_id' => 'required|not_in:0',
@@ -64,15 +68,6 @@ class TaskController extends Controller
             ->with('success', 'Task Created SuccessFully!!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Task $task)
-    {
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -82,7 +77,11 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $user = User::where('is_admin', '!=', '1')->get();
+        $this->authorize('update', $task);
+
+        $user = User::where('role_id', '!=', Roles::IS_ADMIN)
+            ->where('role_id', '!=', Roles::IS_MANAGER)
+            ->get();
 
         return view('tasks.edit', [
             'users' =>  $user,
@@ -99,6 +98,8 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        $this->authorize('update', $task);
+
         $this->validate($request, [
             'user_id' => 'required|not_in:0',
             'task_description' => 'required',
@@ -119,6 +120,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
+
         $task->delete();
 
         return redirect()
