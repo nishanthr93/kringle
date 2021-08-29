@@ -22,16 +22,4 @@ class TaskController extends Controller
             'tasks' => $tasks
         ]);
     }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Task $task)
-    {
-        //
-    }
 }

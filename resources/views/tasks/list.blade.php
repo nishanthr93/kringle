@@ -14,7 +14,8 @@
 
                         @can('create', App\Models\Task::class)
                             <div class="card-header">{{ __('Task List') }}
-                                <a class="btn btn-primary" href="{{ route('admin.task.create') }}" role="button">Add</a>
+                                <a class="btn btn-primary float-right" href="{{ route('admin.task.create') }}"
+                                    role="button">Add</a>
                             </div>
                         @endcan
 
@@ -26,9 +27,9 @@
                                     <th scope="col">Task Desctiption</th>
 
                                     @can('adminsOnly', App\Models\Task::class)
-                                    <th scope="col">Action</th>
+                                        <th scope="col">Action</th>
                                     @endcan
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,20 +39,22 @@
                                         <td>{{ $task->user->name }}</td>
                                         <td>{{ $task->task_description }}</td>
                                         @can('adminsOnly', App\Models\Task::class)
-                                        <td>
-                                            @can('update', $task)
-                                                <a class="btn btn-primary" href="{{ route('admin.task.edit', $task) }}"
-                                                    role="button">Edit</a>
-                                            @endcan
+                                            <td>
+                                                <div class="d-flex">
+                                                    @can('update', $task)
+                                                        <a class="btn btn-primary mr-1" href="{{ route('admin.task.edit', $task) }}"
+                                                            role="button">Edit</a>
+                                                    @endcan
 
-                                            @can('delete', $task)
-                                                <form action="{{ route('admin.task.destroy', $task) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
-                                            @endcan
-                                        </td>
+                                                    @can('delete', $task)
+                                                        <form action="{{ route('admin.task.destroy', $task) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    @endcan
+                                                </div>
+                                            </td>
                                         @endcan
                                     </tr>
                                 @endforeach

@@ -40,7 +40,7 @@
                         @can('adminsOnly', App\Models\Task::class)
                             <a class="nav-link" href="{{ route('admin.task.index') }}" role="button">All Task</a>
                         @elsecan('normalUsers', App\Models\Task::class)
-                            <a class="nav-link" href="{{ route('task.index') }}" role="button">My Tasks</a>
+                            <a class="nav-link" href="{{ route('user.task.index') }}" role="button">My Tasks</a>
                         @endcan
                     </ul>
 

@@ -44,6 +44,10 @@ class LoginController extends Controller
         if ((auth()->user()->role_id == Roles::IS_ADMIN) || (auth()->user()->role_id == Roles::IS_MANAGER)) {
             return redirect()->route('admin.task.index');
         }
+        
+        if ((auth()->user()->role_id == Roles::IS_USER)) {
+            return redirect()->route('user.task.index');
+        }
 
         return redirect('/');
     }

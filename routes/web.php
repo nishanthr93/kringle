@@ -13,10 +13,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group([
         'prefix'    => 'user',
+        'as' => 'user.'
     ], function () {
-        // Route::resource('task', UserTaskController::class)->only([
-        //     'index', 'show'
-        // ]);
         Route::resource('task' , UserTaskController::class);
     });
 
