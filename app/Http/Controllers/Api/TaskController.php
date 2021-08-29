@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Task;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
@@ -19,7 +20,13 @@ class TaskController extends Controller
         if (!auth()->user()->tokenCan('task-index')) {
             abort(403, 'Not Unauthorized');
         }
-        $tasks = Task::paginate(5);
+
+        if ((auth()->user()->role_id == Roles::IS_ADMIN) || (auth()->user()->role_id == Roles::IS_MANAGER)) {
+            $tasks = Task::paginate(5);
+        } else {
+            $tasks = auth()->user()->task()->paginate(5);
+        }
+        
         return new TaskResource($tasks);
     }
 
@@ -95,9 +102,8 @@ class TaskController extends Controller
     {
         if (!auth()->user()->tokenCan('task-destroy')) {
             abort(403, 'Not Unauthorized');
-            
         }
-        
+
         $task->delete();
 
         return new TaskResource([
