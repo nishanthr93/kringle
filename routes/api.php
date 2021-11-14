@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::post('/v1/get/token', [GenerateTokensController::class,'index']);
 
 Route::group([
